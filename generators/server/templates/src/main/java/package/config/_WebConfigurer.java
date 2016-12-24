@@ -23,9 +23,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-<% if (!skipClient) { %>
-import java.io.File;
-import java.nio.file.Paths;<% } %>
+
 import java.util.*;
 import javax.servlet.*;
 
@@ -125,43 +123,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
         mappings.add("json", "text/html;charset=utf-8");
         container.setMimeMappings(mappings);
-        <%_ if (!skipClient) { _%>
-        // When running in an IDE or with <% if (buildTool == 'gradle') { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
-        setLocationForStaticAssets(container);
-        <%_ } _%>
     }
     <%_ if (!skipClient) { _%>
-
-    private void setLocationForStaticAssets(ConfigurableEmbeddedServletContainer container) {
-        File root;
-        String prefixPath = resolvePathPrefix();
-        <%_ if (clientFramework === 'angular2') { _%>
-        root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
-        <%_ } else { _%>
-        if (env.acceptsProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
-            root = new File(prefixPath + "<%= CLIENT_DIST_DIR %>");
-        } else {
-            root = new File(prefixPath + "<%= CLIENT_MAIN_SRC_DIR %>");
-        }
-        <%_ } _%>
-        if (root.exists() && root.isDirectory()) {
-            container.setDocumentRoot(root);
-        }
-    }
-
-    /**
-     *  Resolve path prefix to static resources.
-     */
-    private String resolvePathPrefix() {
-        String fullExecutablePath = this.getClass().getResource("").getPath();
-        String rootPath = Paths.get(".").toUri().normalize().getPath();
-        String extractedPath = fullExecutablePath.replace(rootPath, "");
-        int extractionEndIndex = extractedPath.indexOf("<% if (buildTool == 'gradle') { %>build/<% } else { %>target/<% } %>");
-        if(extractionEndIndex <= 0) {
-            return "";
-        }
-        return extractedPath.substring(0, extractionEndIndex);
-    }
 
     /**
      * Initializes the caching HTTP Headers Filter.
