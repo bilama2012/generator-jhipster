@@ -139,5 +139,9 @@ public class <%= entityClass %>Resource {
      */
     @GetMapping("/_search/<%= entityApiUrl %>")
     @Timed<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>
+	
+	public void samirMethod(){
+		System.out.print("Salem Samir : first modif jhipster !!");
+	}
 
 }
