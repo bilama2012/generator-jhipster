@@ -28,7 +28,7 @@ const MAIN_DIR = 'src/main/';
 const TEST_DIR = 'src/test/';
 
 // Note: this will be prepended with 'target/' for Maven, or with 'build/' for Gradle.
-const CLIENT_DIST_DIR = 'classes/resources';
+const CLIENT_DIST_DIR = 'classes/resources/';
 
 const SUPPORTED_VALIDATION_RULES = ['required', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
 
